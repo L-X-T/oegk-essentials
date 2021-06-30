@@ -2,10 +2,10 @@ import { Component, computed, DestroyRef, effect, inject, OnDestroy, signal } fr
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { Flight } from '../entities/flight';
+import { Flight } from '../../entities/flight';
 import { FlightService } from './flight.service';
-import { BehaviorSubject, Observable, Observer, pipe, Subject, Subscription } from 'rxjs';
-import { share, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Observer, of, pipe, Subject, Subscription } from 'rxjs';
+import { catchError, share, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-flight-search',
@@ -17,13 +17,12 @@ export class FlightSearchComponent implements OnDestroy {
   to = 'Graz';
   flights: Flight[] = []; // old school
   flights$?: Observable<Flight[]>; // observable
-  flightsSubject = new BehaviorSubject<Flight[]>([]); // subject
-  flightsSignal = signal<Flight[]>([]); // signal
-  flightsLength = computed(() => this.flightsSignal().length); // signal
-
+  readonly flightsSubject = new BehaviorSubject<Flight[]>([]); // subject
+  readonly flightsSignal = signal<Flight[]>([]); // signal
+flightsLength = computed(() => this.flightsSignal().length); // signal
   flightsSubscription?: Subscription;
-  // private readonly onDestroySubject = new Subject<void>();
-  // readonly terminator$ = this.onDestroySubject.asObservable();
+  private readonly onDestroySubject = new Subject<void>();
+  readonly terminator$ = this.onDestroySubject.asObservable();
 
   selectedFlight?: Flight;
 
@@ -36,18 +35,31 @@ export class FlightSearchComponent implements OnDestroy {
     effect(() => console.log(this.flightsSignal(), this.flightsLength()));
   }
 
+  ngOnDestroy(): void {
+    // 4a. my unsubscribe
+    this.flightsSubscription?.unsubscribe();
+
+    // 4b. subject emit thru terminator$
+    this.onDestroySubject.next(void 0);
+    this.onDestroySubject.complete();
+
+    // complete behavior subject
+    this.flightsSubject.complete();
+  }
+
   onSearch(): void {
-    // 1. my observable
-    this.flights$ = this.flightService.find(this.from, this.to).pipe(share());
+    // 1. my hot observable
+    this.flights$ = this.flightService.find(this.from, this.to).pipe(
+      // catchError((err: HttpErrorResponse) => {
+      //   console.log(err.message);
+      //   return of([]);
+      // }),
+      share()
+    );
 
     // 2. my observer
     const flightsObserver: Observer<Flight[]> = {
-      next: (flights) => {
-        this.flights = flights;
-        this.flightsSubject.next(flights);
-        this.flightsSignal.set(flights);
-        this.flightsSignal.update((flights) => [...flights]);
-      },
+      next: (flights) => this.onNextFlights(flights),
       error: (errResp: HttpErrorResponse) => console.error('Error loading flights', errResp),
       complete: () => console.debug('Flights loading completed.')
     };
@@ -57,22 +69,17 @@ export class FlightSearchComponent implements OnDestroy {
     this.flightsSubscription = this.flights$.subscribe(flightsObserver);
 
     // 3b. takeUntil terminator$ emits
-    // this.flights$.pipe(takeUntil(this.terminator$)).subscribe(flightsObserver);
+    this.flights$.pipe(takeUntil(this.terminator$)).subscribe(flightsObserver);
 
     // 3c. takeUntilDestroyed
     this.flights$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(flightsObserver);
   }
 
-  ngOnDestroy(): void {
-    // 4a. my unsubscribe
-    this.flightsSubscription?.unsubscribe();
-
-    // 4b. subject emit thru terminator$
-    // this.onDestroySubject.next(void 0);
-    // this.onDestroySubject.complete();
-
-    // complete behavior subject
-    this.flightsSubject.complete();
+  private onNextFlights(flights: Flight[]): void {
+    this.flights = flights;
+    this.flightsSubject.next(flights);
+    this.flightsSignal.set(flights);
+    this.flightsSignal.update((flights) => [...flights]);
   }
 
   onSelect(selectedFlight: Flight): void {
