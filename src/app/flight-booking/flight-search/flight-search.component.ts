@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, OnDestroy, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -12,7 +12,7 @@ import { catchError, share, takeUntil } from 'rxjs/operators';
   templateUrl: './flight-search.component.html',
   styleUrls: ['./flight-search.component.css']
 })
-export class FlightSearchComponent implements OnDestroy {
+export class FlightSearchComponent implements OnInit, OnDestroy {
   from = 'Hamburg';
   to = 'Graz';
   flights: Flight[] = []; // old school
@@ -33,6 +33,17 @@ export class FlightSearchComponent implements OnDestroy {
 
   constructor() {
     effect(() => console.log(this.flightsSignal(), this.flightsLength()));
+  }
+
+  basket: { [id: number]: boolean } = {
+    3: true,
+    5: true
+  };
+
+  ngOnInit(): void {
+    if (this.from && this.to) {
+      this.onSearch();
+    }
   }
 
   ngOnDestroy(): void {
