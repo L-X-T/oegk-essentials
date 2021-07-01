@@ -28,17 +28,17 @@ export class FlightSearchComponent implements OnInit, OnDestroy {
 
   message = '';
 
+  basket: { [id: number]: boolean } = {
+    3: true,
+    5: true
+  };
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly flightService = inject(FlightService);
 
   constructor() {
     effect(() => console.log(this.flightsSignal(), this.flightsLength()));
   }
-
-  basket: { [id: number]: boolean } = {
-    3: true,
-    5: true
-  };
 
   ngOnInit(): void {
     if (this.from && this.to) {

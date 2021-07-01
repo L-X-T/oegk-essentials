@@ -31,13 +31,13 @@ export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSelect(): void {
-    this.selected = true;
+    // this.selected = true;
     this.debugInputs('onSelect');
     this.selectedChange.emit(true);
   }
 
   onDeselect(): void {
-    this.selected = false;
+    // this.selected = false;
     this.debugInputs('onDeselect');
     this.selectedChange.emit(false);
   }
