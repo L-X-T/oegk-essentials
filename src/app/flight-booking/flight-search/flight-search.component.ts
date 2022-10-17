@@ -24,7 +24,7 @@ export class FlightSearchComponent implements OnInit, OnDestroy {
   private readonly onDestroySubject = new Subject<void>();
   readonly terminator$ = this.onDestroySubject.asObservable();
 
-  selectedFlight?: Flight;
+  selectedFlight: Flight | null = null;
 
   message = '';
 
@@ -93,8 +93,9 @@ export class FlightSearchComponent implements OnInit, OnDestroy {
     this.flightsSignal.update((flights) => [...flights]);
   }
 
-  onSelect(selectedFlight: Flight): void {
-    this.selectedFlight = selectedFlight;
+  onSelectToggle(flight: Flight): void {
+    this.basket[flight.id] = !this.basket[flight.id];
+    this.selectedFlight = this.basket[flight.id] ? flight : null;
   }
 
   onSave(): void {

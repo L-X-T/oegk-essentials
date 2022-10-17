@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { Flight } from '../../entities/flight';
 
@@ -8,11 +8,10 @@ import { Flight } from '../../entities/flight';
   styleUrls: ['./flight-card.component.css']
 })
 export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
-  debug = true;
+  debug = false;
 
   @Input({ required: true }) item!: Flight;
   @Input() selected = false;
-  @Output() selectedChange = new EventEmitter<boolean>();
 
   constructor() {
     this.debugInputs('constructor');
@@ -28,18 +27,6 @@ export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.debugInputs('ngOnDestroy');
-  }
-
-  onSelect(): void {
-    // this.selected = true;
-    this.debugInputs('onSelect');
-    this.selectedChange.emit(true);
-  }
-
-  onDeselect(): void {
-    // this.selected = false;
-    this.debugInputs('onDeselect');
-    this.selectedChange.emit(false);
   }
 
   private debugInputs(method: string): void {
