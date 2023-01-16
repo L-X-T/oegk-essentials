@@ -116,4 +116,12 @@ export class FlightSearchComponent implements OnInit, OnDestroy {
         });
     }
   }
+
+  trackById(index: number, flight: Flight): number {
+    return flight.id;
+  }
+
+  removeSecondFlight(): void {
+    this.flights = [{ ...this.flights[0] }, ...this.flights.slice(2)];
+  }
 }
