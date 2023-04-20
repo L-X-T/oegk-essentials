@@ -108,7 +108,7 @@ export class FlightEditComponent implements OnChanges {
           this.message = 'Success saving!';
           this.patchFormValue();
 
-          setTimeout(() => this.router.navigate(['/flight-search']), 3000);
+          setTimeout(() => this.router.navigate(['/flight-booking', 'flight-search']), 3000);
         },
         error: (err: HttpErrorResponse) => {
           if (this.debug) {
