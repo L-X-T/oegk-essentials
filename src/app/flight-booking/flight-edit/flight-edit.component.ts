@@ -8,6 +8,7 @@ import { FlightService } from '../../services/flight.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { validateCity } from '../shared/validation/city-validator';
 import { validateAsyncCity } from '../shared/validation/async-city-validator';
+import { validateRoundTrip } from '../shared/validation/round-trip-validator';
 
 @Component({
   selector: 'app-flight-edit',
@@ -20,35 +21,40 @@ export class FlightEditComponent implements OnChanges {
   private readonly destroyRef = inject(DestroyRef);
   private readonly flightService = inject(FlightService);
 
-  editForm: FormGroup = inject(FormBuilder).group({
-    id: [0, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9]+$/)]],
-    from: [
-      '',
-      {
-        asyncValidators: [validateAsyncCity(this.flightService)],
-        validators: [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(15),
-          validateCity(['Graz', 'Wien', 'Hamburg', 'Berlin'])
-        ],
-        updateOn: 'blur'
-      }
-    ],
-    to: [
-      '',
-      {
-        validators: [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(15),
-          validateCity(['Graz', 'Wien', 'Hamburg', 'Berlin'])
-        ],
-        updateOn: 'blur'
-      }
-    ],
-    date: ['', [Validators.required, Validators.minLength(33), Validators.maxLength(33)]]
-  });
+  editForm: FormGroup = inject(FormBuilder).group(
+    {
+      id: [0, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9]+$/)]],
+      from: [
+        '',
+        {
+          asyncValidators: [validateAsyncCity(this.flightService)],
+          validators: [
+            Validators.required,
+            Validators.minLength(3),
+            Validators.maxLength(15),
+            validateCity(['Graz', 'Wien', 'Hamburg', 'Berlin'])
+          ],
+          updateOn: 'blur'
+        }
+      ],
+      to: [
+        '',
+        {
+          validators: [
+            Validators.required,
+            Validators.minLength(3),
+            Validators.maxLength(15),
+            validateCity(['Graz', 'Wien', 'Hamburg', 'Berlin'])
+          ],
+          updateOn: 'blur'
+        }
+      ],
+      date: ['', [Validators.required, Validators.minLength(33), Validators.maxLength(33)]]
+    },
+    {
+      validators: validateRoundTrip
+    }
+  );
 
   message = '';
 
