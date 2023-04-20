@@ -20,8 +20,20 @@ export class FlightEditComponent implements OnChanges {
 
   editForm: FormGroup = inject(FormBuilder).group({
     id: [0, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9]+$/)]],
-    from: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
-    to: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
+    from: [
+      '',
+      {
+        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(15)],
+        updateOn: 'blur'
+      }
+    ],
+    to: [
+      '',
+      {
+        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(15)],
+        updateOn: 'blur'
+      }
+    ],
     date: ['', [Validators.required, Validators.minLength(33), Validators.maxLength(33)]]
   });
 
