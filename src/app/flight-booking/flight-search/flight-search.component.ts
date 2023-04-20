@@ -1,11 +1,12 @@
-import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgForm } from '@angular/forms';
 
 import { Flight } from '../../entities/flight';
 import { FlightService } from '../../services/flight.service';
-import { BehaviorSubject, Observable, Observer, of, pipe, Subject, Subscription } from 'rxjs';
-import { catchError, share, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Observer, Subject, Subscription } from 'rxjs';
+import { share, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-flight-search',
@@ -13,8 +14,10 @@ import { catchError, share, takeUntil } from 'rxjs/operators';
   styleUrls: ['./flight-search.component.css']
 })
 export class FlightSearchComponent implements OnInit, OnDestroy {
-  from = 'Hamburg';
-  to = 'Graz';
+  @ViewChild('flightSearchForm') flightSearchForm?: NgForm;
+
+  from = '';
+  to = '';
 
   minLength = 3;
   maxLength = 15;
@@ -63,6 +66,11 @@ export class FlightSearchComponent implements OnInit, OnDestroy {
   }
 
   onSearch(): void {
+    if (this.flightSearchForm?.invalid) {
+      this.flightSearchForm.form.markAllAsTouched();
+      return;
+    }
+
     // 1. my hot observable
     this.flights$ = this.flightService.find(this.from, this.to).pipe(
       // catchError((err: HttpErrorResponse) => {
