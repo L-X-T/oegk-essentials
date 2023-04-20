@@ -7,6 +7,10 @@ import { AirportsComponent } from './airports/airports.component';
 
 const flightBookingRoutes: Routes = [
   {
+    path: 'flight-edit/:id',
+    component: FlightEditComponent
+  },
+  {
     path: 'flight-search',
     component: FlightSearchComponent
   },

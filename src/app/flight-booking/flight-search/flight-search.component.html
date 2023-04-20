@@ -102,7 +102,7 @@
         </button>
 
         <app-flight-status-toggle style="margin-right: 10px" [(delayed)]="f.delayed" />
-        <button class="btn btn-default" (click)="flightToEdit = f">Edit</button>
+        <button class="btn btn-default" [routerLink]="['/flight-edit', f.id, { showDetails: true }]">Edit</button>
       </ng-container>
     </app-flight-card>
   </div>
