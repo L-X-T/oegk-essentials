@@ -13,20 +13,17 @@
           name="from"
           class="form-control"
           required="required"
-          minlength="3"
-          maxlength="15"
+          [minlength]="minLength"
+          [maxlength]="maxLength"
           pattern="[a-zA-ZäöüÄÖÜß ]*"
         />
       </div>
 
-      <div *ngIf="flightSearchForm.controls['from']?.errors">
-        <div class="text-danger">From is invalid:</div>
-        <div class="text-info">{{ flightSearchForm.controls['from'].errors | json }}</div>
-        <div *ngIf="flightSearchForm.controls['from'].errors?.['required']" class="text-danger">From is required.</div>
-        <div *ngIf="flightSearchForm.controls['from'].errors?.['minlength']" class="text-danger">From minlength is 3.</div>
-        <div *ngIf="flightSearchForm.controls['from'].errors?.['maxlength']" class="text-danger">From maxlength is 15.</div>
-        <div *ngIf="flightSearchForm.controls['from'].errors?.['pattern']" class="text-danger">From has invalid input.</div>
-      </div>
+      <app-flight-validation-errors
+        *ngIf="flightSearchForm.controls['from']"
+        [errors]="flightSearchForm.controls['from'].errors"
+        fieldLabel="From"
+      />
 
       <div class="form-group">
         <label for="fsf_to">To (*)</label>
@@ -35,20 +32,17 @@
           name="to"
           class="form-control"
           required="required"
-          minlength="3"
-          maxlength="15"
+          [minlength]="minLength"
+          [maxlength]="maxLength"
           pattern="[a-zA-ZäöüÄÖÜß ]*"
         />
       </div>
 
-      <div *ngIf="flightSearchForm.controls['to']?.errors">
-        <div class="text-danger">To is invalid:</div>
-        <div class="text-info">{{ flightSearchForm.controls['to'].errors | json }}</div>
-        <div *ngIf="flightSearchForm.controls['to'].errors?.['required']" class="text-danger">To is required.</div>
-        <div *ngIf="flightSearchForm.controls['to'].errors?.['minlength']" class="text-danger">To minlength is 3.</div>
-        <div *ngIf="flightSearchForm.controls['to'].errors?.['maxlength']" class="text-danger">To maxlength is 15.</div>
-        <div *ngIf="flightSearchForm.controls['to'].errors?.['pattern']" class="text-danger">To has invalid input.</div>
-      </div>
+      <app-flight-validation-errors
+        *ngIf="flightSearchForm.controls['to']"
+        [errors]="flightSearchForm.controls['to'].errors"
+        fieldLabel="To"
+      />
 
       <div class="form-group">
         <button [disabled]="!to || !from || flightSearchForm.invalid" (click)="onSearch()" class="btn btn-default">Search</button>

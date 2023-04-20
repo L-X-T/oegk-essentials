@@ -15,6 +15,10 @@ import { catchError, share, takeUntil } from 'rxjs/operators';
 export class FlightSearchComponent implements OnInit, OnDestroy {
   from = 'Hamburg';
   to = 'Graz';
+
+  minLength = 3;
+  maxLength = 15;
+
   flights: Flight[] = []; // old school
   flights$?: Observable<Flight[]>; // observable
   readonly flightsSubject = new BehaviorSubject<Flight[]>([]); // subject
