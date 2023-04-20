@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
+import { FlightBookingRoutingModule } from './flight-booking-routing.module';
 
 import { FlightSearchComponent } from './flight-search/flight-search.component';
 import { AirportsComponent } from './airports/airports.component';
@@ -12,9 +13,10 @@ import { AsyncCityValidatorDirective } from './shared/validation/async-city-vali
 import { MultiFieldValidatorDirective } from './shared/validation/multi-field-validator.directive';
 import { AsyncMultiFieldValidatorDirective } from './shared/validation/async-multi-field-validator.directive';
 import { FlightEditComponent } from './flight-edit/flight-edit.component';
+import { PassengerSearchComponent } from './passenger-search/passenger-search.component';
 
 @NgModule({
-  imports: [SharedModule],
+  imports: [SharedModule, FlightBookingRoutingModule],
   declarations: [
     FlightSearchComponent,
 
@@ -26,7 +28,8 @@ import { FlightEditComponent } from './flight-edit/flight-edit.component';
     AsyncCityValidatorDirective,
     MultiFieldValidatorDirective,
     AsyncMultiFieldValidatorDirective,
-    FlightEditComponent
+    FlightEditComponent,
+    PassengerSearchComponent
   ],
   exports: [SharedModule, FlightSearchComponent, AirportsComponent]
 })
