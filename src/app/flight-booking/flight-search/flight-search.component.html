@@ -4,7 +4,7 @@
   </div>
 
   <div class="content">
-    <form #flightSearchForm="ngForm" [roundTrip]="['from', 'to']">
+    <form #flightSearchForm="ngForm" [roundTrip]="['from', 'to']" [asyncMulti]="['from', 'to']">
       <div class="form-group">
         <label for="fsf_from">From (*)</label>
         <input
@@ -48,6 +48,8 @@
         [errors]="flightSearchForm.controls['to'].errors"
         fieldLabel="To"
       />
+
+      <div *ngIf="flightSearchForm.pending" class="text-warning">... Executing Async Multi Field Validator(s) ...</div>
 
       <app-flight-validation-errors *ngIf="flightSearchForm.dirty" [errors]="flightSearchForm.errors" fieldLabel="Form" />
 
