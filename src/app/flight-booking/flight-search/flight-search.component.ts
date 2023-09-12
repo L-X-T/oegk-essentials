@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Flight } from '../../entities/flight';
-import { FlightService } from './flight.service';
+import { FlightService } from '../../services/flight.service';
 import { BehaviorSubject, Observable, Observer, of, pipe, Subject, Subscription } from 'rxjs';
 import { catchError, share, takeUntil } from 'rxjs/operators';
 
@@ -19,7 +19,7 @@ export class FlightSearchComponent implements OnDestroy {
   flights$?: Observable<Flight[]>; // observable
   readonly flightsSubject = new BehaviorSubject<Flight[]>([]); // subject
   readonly flightsSignal = signal<Flight[]>([]); // signal
-flightsLength = computed(() => this.flightsSignal().length); // signal
+  flightsLength = computed(() => this.flightsSignal().length); // signal
   flightsSubscription?: Subscription;
   private readonly onDestroySubject = new Subject<void>();
   readonly terminator$ = this.onDestroySubject.asObservable();

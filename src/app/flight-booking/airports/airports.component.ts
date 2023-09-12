@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 
-import { AirportService } from './airport.service';
+import { AirportService } from '../../services/airport.service';
 
 @Component({
   selector: 'app-airports',
