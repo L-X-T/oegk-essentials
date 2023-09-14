@@ -96,7 +96,7 @@
 </div>-->
 
 <div *ngIf="flights.length > 0" class="row">
-  <div *ngFor="let f of flights; trackBy: trackById" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+  <div *ngFor="let f of flights; trackBy: trackById; let index = index" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
     <!--<app-flight-card [item]="f" [selected]="basket[f.id]" (selectedChange)="basket[f.id] = $event" />-->
     <app-flight-card [item]="f" [selected]="basket[f.id]">
       <h3 class="top">Flight</h3>
@@ -105,7 +105,11 @@
           {{ basket[f.id] ? 'Rem.' : 'Add' }}
         </button>
 
-        <app-flight-status-toggle style="margin-right: 10px" [(delayed)]="f.delayed" />
+        <app-flight-status-toggle
+          style="margin-right: 10px"
+          [(delayed)]="f.delayed"
+          (delayedChange)="updateFlightDelayedStatus(index, $event)"
+        />
         <button class="btn btn-default" [routerLink]="['/flight-booking', 'flight-edit', f.id, { showDetails: true }]">Edit</button>
       </ng-container>
     </app-flight-card>
