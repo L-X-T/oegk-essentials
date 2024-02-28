@@ -9,10 +9,11 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FlightSearchComponent } from './flight-search/flight-search.component';
 import { CityPipe } from './shared/pipes/city.pipe';
 import { AsyncCityPipe } from './shared/pipes/async-city.pipe';
+import { AirportsComponent } from './airports/airports.component';
 
 @NgModule({
   imports: [BrowserModule, HttpClientModule, FormsModule],
-  declarations: [AppComponent, SidebarComponent, NavbarComponent, FlightSearchComponent, CityPipe, AsyncCityPipe],
+  declarations: [AppComponent, SidebarComponent, NavbarComponent, FlightSearchComponent, CityPipe, AsyncCityPipe, AirportsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
