@@ -9,6 +9,7 @@ import { Flight } from '../../entities/flight';
 })
 export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
   debug = false;
+  // isInitialized = false;
 
   @Input({ required: true }) item!: Flight;
   @Input() selected = false;
@@ -18,10 +19,12 @@ export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(): void {
+    // this.init();
     this.debugInputs('ngOnChanges');
   }
 
   ngOnInit(): void {
+    // this.init();
     this.debugInputs('ngOnInit');
   }
 
@@ -31,9 +34,19 @@ export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
 
   private debugInputs(method: string): void {
     if (this.debug) {
-      console.debug('[FlightCardComponent - ' + method + '()]');
+      console.warn('[FlightCardComponent - ' + method + '()]');
       console.debug('flight', this.item);
       console.debug('selected', this.selected);
     }
   }
+
+  /*private init(): void {
+    if (this.isInitialized) {
+      return;
+    }
+
+    // init
+
+    this.isInitialized = true;
+  }*/
 }
