@@ -1,5 +1,5 @@
 import { Component, DestroyRef, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -26,21 +26,21 @@ export class FlightEditComponent implements OnChanges {
 
   editForm: FormGroup = inject(FormBuilder).group(
     {
+      // array shorthand (type number inferred from initial value) with validators as array
       id: [0, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9]+$/)]],
+      // array shorthand (type string inferred from initial value) with async validator
       from: [
         '',
-        {
-          asyncValidators: [validateAsyncCity(this.flightService)],
-          validators: [
-            Validators.required,
-            Validators.minLength(3),
-            Validators.maxLength(15),
-            Validators.pattern(this.pattern),
-            validateCity(['Graz', 'Wien', 'Hamburg', 'Berlin'])
-          ],
-          updateOn: 'blur'
-        }
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(15),
+          Validators.pattern(this.pattern),
+          validateCity(['Graz', 'Wien', 'Hamburg', 'Berlin'])
+        ],
+        validateAsyncCity(this.flightService)
       ],
+      // array shorthand with update on (needs options object as 2nd item)
       to: [
         '',
         {
@@ -54,7 +54,11 @@ export class FlightEditComponent implements OnChanges {
           updateOn: 'blur'
         }
       ],
-      date: ['', [Validators.required, Validators.minLength(33), Validators.maxLength(33)]]
+      // FormControl instead of array shorthand, type string inferred from initial value
+      date: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(33), Validators.maxLength(33)],
+        updateOn: 'blur'
+      })
     },
     {
       validators: validateRoundTrip
